@@ -15,14 +15,26 @@ export default function () {
         title: "Development",
       }),
     ],
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+      ],
+    },
     output: {
       filename: "[name].bundle.js",
-      path: path.resolve(__dirname, "dist"),
+      path: path.resolve(import.meta.dirname, "dist"),
       clean: true,
     },
     devtool: "source-map",
     optimization: {
       runtimeChunk: "single",
+    },
+    resolve: {
+      extensions: ['.js', '.jsx', '.ts', '.tsx'],
     },
   };
 }
