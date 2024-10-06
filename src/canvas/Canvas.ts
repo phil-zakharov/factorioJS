@@ -1,5 +1,7 @@
 import { Building } from "../buildings/types";
 
+import * as cls from './canvas.module.css'
+
 export class Canvas {
   #canvas: HTMLCanvasElement;
   #context: CanvasRenderingContext2D;
@@ -15,10 +17,12 @@ export class Canvas {
 
     this.#context = this.#canvas.getContext("2d")!;
 
+    this.#canvas.classList.add(cls.canvas)
+    
     this.#canvas.width = this.#width;
-
+    
     this.#canvas.height = this.#height;
-
+    
     htmlElement.appendChild(this.#canvas);
   }
 
@@ -31,7 +35,7 @@ export class Canvas {
   }
 
   build(building: Building) {
-    this.#buildings.push(building);
+    // this.#buildings.push(building);
 
     this.#context.fillStyle = building.styles.background;
 

@@ -1,8 +1,8 @@
 const config = {
-  trailingComma: "es5",
-  tabWidth: 4,
-  semi: false,
+  tabWidth: 2,
+  semi: true,
   singleQuote: true,
+  printWidth: 80
 };
 
 export default config;

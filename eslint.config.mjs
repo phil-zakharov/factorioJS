@@ -1,11 +1,11 @@
 /** @format */
 
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import eslintPluginPrettier from 'eslint-plugin-prettier';
-import eslintPluginImport from 'eslint-plugin-import';
-import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
+import globals from 'globals'
+import pluginJs from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import eslintPluginPrettier from 'eslint-plugin-prettier'
+import eslintPluginImport from 'eslint-plugin-import'
+import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin'
 
 export default [
   pluginJs.configs.recommended,
@@ -42,6 +42,7 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
@@ -96,7 +97,6 @@ export default [
       '@typescript-eslint/no-unsafe-unary-minus': 'error',
       'no-unused-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'error',
-      'no-unused-vars': 'off',
       'no-useless-constructor': 'off',
       '@typescript-eslint/no-useless-constructor': 'error',
       '@typescript-eslint/no-wrapper-object-types': 'error',
@@ -190,4 +190,4 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-];
+]
