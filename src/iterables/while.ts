@@ -1,6 +1,7 @@
-export async function* doWhile<
-  T extends AsyncIterableIterator<unknown, string>,
->(iterable: T, rejectIterable: T) {
+export async function* doWhile<T, U>(
+  iterable: AsyncIterableIterator<T>,
+  rejectIterable: AsyncIterableIterator<U>
+) {
   const iterator = iterable[Symbol.asyncIterator]();
 
   const rejector = rejectIterable[Symbol.asyncIterator]();
@@ -9,18 +10,22 @@ export async function* doWhile<
 
   rejector.next().then(() => stopped = true)
 
-  for await (const chunk of iterator) {
-    if (stopped) {
-      if (iterator.return) {
-        iterator.return('doWhile return')
+  try {
+    for await (const chunk of iterator) {
+      if (stopped) {
+        throw new Error('stopped')
       }
-
-      if (rejector.return) {
-        rejector.return('doWhile return')
-      }
-
-      return;
+      yield chunk
     }
-    yield chunk
+  } catch (error) {
+    console.log('stopped', error)
+  } finally {
+    if (iterator.return) {
+      iterator.return('doWhile return')
+    }
+
+    if (rejector.return) {
+      rejector.return('doWhile return')
+    }
   }
 }

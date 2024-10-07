@@ -16,6 +16,7 @@ import { once } from './iterables/once'
 import { doWhile } from './iterables/while'
 import { onEvent } from './core/DnD/base/onEvent'
 import { throttle } from './core/utils/throttle'
+import { moveSource } from './core/DnD/draggable/moveSource'
 
 function main() {
   const button = document.createElement('button')
@@ -67,25 +68,19 @@ function buildMiner(canvas: Canvas) {
 async function start(element: Draggable) {
   console.log('1')
 
-  const result = await once(addSource(element)).next()
-
-  console.log('result', result)
+  const { value } = await once(addSource(element)).next()
 
   console.log('2')
 
   const movable = new Movable(document.body)
 
-  const move = (chunk: unknown) => {
-    console.log('chunk', chunk)
-  }
-  
-  const throttledMove = throttle(move, 20)
+  const throttledMove = throttle(moveSource, 20)
 
   for await (const chunk of doWhile(
     handleMove(movable),
-    onEvent(document.body, 'mouseup', () => 'mousemove')
+    onEvent(document.body, 'mouseup')
   )) {
-    throttledMove(chunk)
+    throttledMove(value, chunk)
   }
 
   console.log('3')

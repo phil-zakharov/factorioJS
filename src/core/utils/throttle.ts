@@ -1,12 +1,15 @@
-export function throttle<T extends unknown[]>(fn: (...args: T) => void, delayMS: number) {
-  let isReady = true;
+export function throttle<T extends (...args: never[]) => void>(
+  fn: T,
+  delayMS: number
+): (...args: Parameters<T>) => void {
+  let isReady = true
 
-  return function (...args: T) {
+  return function (...args: Parameters<T>): void {
     if (isReady) {
       fn(...args)
-      
-      isReady = false;
-      
+
+      isReady = false
+
       setTimeout(() => {
         isReady = true
       }, delayMS)

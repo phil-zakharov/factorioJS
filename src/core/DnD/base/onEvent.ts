@@ -1,14 +1,22 @@
 type Resolver<V> = (arg: IteratorResult<V>) => void
-type Listener = () => void
 
-export function onEvent<Value extends string>(
+type Listener<K extends keyof HTMLElementEventMap> = (
+  this: HTMLElement,
+  ev: HTMLElementEventMap[K]
+) => void
+
+type Value<K extends keyof HTMLElementEventMap> = [
+  HTMLElement,
+  HTMLElementEventMap[K],
+]
+
+export function onEvent<K extends keyof HTMLElementEventMap>(
   element: HTMLElement,
-  event: keyof HTMLElementEventMap,
-  getValue: () => Value
-): AsyncIterableIterator<Value> {
+  event: K
+): AsyncIterableIterator<Value<K>> {
   let handled = false,
-    resolver: Resolver<Value> = () => {},
-    listener: Listener = () => {}
+    resolver: Resolver<Value<K>> = () => {},
+    listener: Listener<K> = () => {}
 
   return {
     [Symbol.asyncIterator]() {
@@ -18,8 +26,8 @@ export function onEvent<Value extends string>(
       if (!handled) {
         handled = true
 
-        listener = () => {
-          resolver({ value: getValue(), done: false })
+        listener = function (this: HTMLElement, event: HTMLElementEventMap[K]) {
+          resolver({ value: [this, event], done: false })
         }
 
         element.addEventListener(event, listener)
