@@ -15,7 +15,7 @@ export class Miner implements Building {
   styles: Styles;
 
   constructor(x: number, y: number) {
-    this.basement = new Basement(20, 20);
+    this.basement = new Basement(40, 40);
     this.position = new Position(x, y);
     this.styles = new Styles(Background.RED);
   }

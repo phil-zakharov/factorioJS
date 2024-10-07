@@ -1,37 +1,35 @@
-import { Building } from "../buildings/types";
+import { Building } from '../buildings/types';
 
-import * as cls from './canvas.module.css'
+import * as cls from './canvas.module.css';
 
 export class Canvas {
   #canvas: HTMLCanvasElement;
   #context: CanvasRenderingContext2D;
 
-  #height = 100;
-
-  #width = 100;
-
   #buildings: Building[] = [];
 
-  constructor(htmlElement: HTMLElement) {
-    this.#canvas = document.createElement("canvas");
+  constructor(private wrapper: HTMLElement) {
+    this.#canvas = document.createElement('canvas');
 
-    this.#context = this.#canvas.getContext("2d")!;
+    this.#context = this.#canvas.getContext('2d')!;
 
-    this.#canvas.classList.add(cls.canvas)
-    
-    this.#canvas.width = this.#width;
-    
-    this.#canvas.height = this.#height;
-    
-    htmlElement.appendChild(this.#canvas);
+    this.#canvas.classList.add(cls.canvas);
+  }
+
+  render() {
+    this.wrapper.appendChild(this.#canvas);
   }
 
   set height(value: number) {
-    this.#height = value;
+    this.#canvas.height = value;
   }
 
   set width(value: number) {
-    this.#width = value;
+    this.#canvas.width = value;
+  }
+
+  get canvas() {
+    return this.#canvas
   }
 
   build(building: Building) {
@@ -48,10 +46,10 @@ export class Canvas {
   }
 
   addBuilding(building: Building) {
-    this.#buildings.push(building)
+    this.#buildings.push(building);
   }
 
   start() {
-    this.#buildings.forEach((b) => b.basement.height)
+    this.#buildings.forEach((b) => b.basement.height);
   }
 }

@@ -9,26 +9,15 @@ import { Basement } from './container/Basement'
 import { Styles } from './container/Styles'
 import { Background } from './consts/styles/background'
 import { addSource } from './core/DnD/draggable/addSource'
-import { Draggable } from './core/DnD/draggable/Draggable'
 import { handleMove } from './core/DnD/moveble/move'
 import { Movable } from './core/DnD/moveble/Movable'
 import { once } from './iterables/once'
 import { doWhile } from './iterables/while'
 import { onEvent } from './core/DnD/base/onEvent'
 import { throttle } from './core/utils/throttle'
-import { moveSource } from './core/DnD/draggable/moveSource'
+import { moveSource } from './core/DnD/moveble/moveSource'
 
-function main() {
-  const button = document.createElement('button')
-
-  button.textContent = 'Build Miner'
-
-  button.onclick = () => {
-    buildMiner(canvas)
-  }
-
-  document.body.appendChild(button)
-
+async function main() {
   const container = new Container()
 
   const canvas = new Canvas(container.htmlElement)
@@ -38,39 +27,19 @@ function main() {
 
   document.body.appendChild(container.htmlElement)
 
+  canvas.render()
+
   const buildMenuContainer = new BuildMenuContainer()
 
   const item = getItem(buildMenuContainer)
 
-  start(item.draggable)
+  await buildMiner(item, canvas)
 }
 
 main()
 
-function getItem(buildMenuContainer: BuildMenuContainer) {
-  const item = new BuildMenuItem(
-    new Basement(40, 40),
-    new Styles(Background.RED)
-  )
-
-  buildMenuContainer.appendChild(item)
-
-  document.body.appendChild(buildMenuContainer.render())
-  return item
-}
-
-function buildMiner(canvas: Canvas) {
-  const miner = new Miner(20, 40)
-
-  canvas.build(miner)
-}
-
-async function start(element: Draggable) {
-  console.log('1')
-
-  const { value } = await once(addSource(element)).next()
-
-  console.log('2')
+async function buildMiner(item: BuildMenuItem, canvas: Canvas) {
+  const { value } = await once(addSource(item.draggable)).next()
 
   const movable = new Movable(document.body)
 
@@ -83,5 +52,26 @@ async function start(element: Draggable) {
     throttledMove(value, chunk)
   }
 
-  console.log('3')
+  const { x, y } = item.element.getBoundingClientRect()
+
+  const miner = new Miner(x, y)
+
+  canvas.build(miner)
+
+  item.element.style.removeProperty('transform')
+
+  buildMiner(item, canvas)
+}
+
+function getItem(buildMenuContainer: BuildMenuContainer) {
+  const item = new BuildMenuItem(
+    new Basement(40, 40),
+    new Styles(Background.RED)
+  )
+
+  buildMenuContainer.appendChild(item)
+
+  document.body.appendChild(buildMenuContainer.render())
+  
+  return item
 }
