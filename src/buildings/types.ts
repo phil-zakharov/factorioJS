@@ -5,7 +5,9 @@ import { Styles } from "../container/Styles";
 
 export interface Building {
   position: Position;
+
   basement: Basement;
+  
   styles: Styles;
 
   factory: Factory;
