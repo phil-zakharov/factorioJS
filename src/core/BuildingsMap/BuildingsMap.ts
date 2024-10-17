@@ -1,6 +1,6 @@
 class BuildingsNode {
-  x: number;
-  y: number;
+  x: number | undefined;
+  y: number | undefined;
 }
 
 export class BuildingsMap {

@@ -1,10 +1,10 @@
-import { BuildMenuItem } from '../item/BuildMenuItem'
+import { MenuItem } from '../item/MenuItem'
 import * as cls from './BuildMenuContainer.module.css'
 
 export class BuildMenuContainer {
-  #chields: BuildMenuItem[] = []
+  #chields: MenuItem[] = []
 
-  appendChild(child: BuildMenuItem) {
+  appendChild(child: MenuItem) {
     this.#chields.push(child)
   }
 

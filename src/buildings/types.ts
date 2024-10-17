@@ -1,14 +1,14 @@
-import { Basement } from "../container/Basement";
-import { Factory } from "../container/Factory";
-import { Position } from "../container/Position";
-import { Styles } from "../container/Styles";
+import { Basement } from '../behavior/Basement';
+import { Factory } from '../behavior/Factory';
+import { Position } from '../behavior/Position';
+import { StylesBehavior } from '../behavior/Styles';
 
 export interface Building {
   position: Position;
 
   basement: Basement;
-  
-  styles: Styles;
+
+  styles: StylesBehavior;
 
   factory: Factory;
 }

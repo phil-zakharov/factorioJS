@@ -1,13 +1,10 @@
 import './styles/reset.css';
 
-import { Miner } from './buildings/Miner';
+import { Miner, MinerMenuItem } from './buildings/Miner';
 import { Canvas } from './canvas/Canvas';
-import { Container } from './container/Container';
+import { Container } from './behavior/Container';
 import { BuildMenuContainer } from './ui/build-menu/container/BuildMenuContainer';
-import { BuildMenuItem } from './ui/build-menu/item/BuildMenuItem';
-import { Basement } from './container/Basement';
-import { Styles } from './container/Styles';
-import { Background } from './consts/styles/background';
+import { MenuItem } from './ui/build-menu/item/MenuItem';
 import { addSource } from './core/DnD/draggable/addSource';
 import { handleMove } from './core/DnD/moveble/move';
 import { Movable } from './core/DnD/moveble/Movable';
@@ -46,7 +43,7 @@ async function main() {
 
 main();
 
-async function buildMiner(item: BuildMenuItem, canvas: Canvas) {
+async function buildMiner(item: MenuItem, canvas: Canvas) {
   const { value } = await once(addSource(item.draggable)).next();
 
   const movable = new Movable(document.body);
@@ -74,10 +71,7 @@ async function buildMiner(item: BuildMenuItem, canvas: Canvas) {
 }
 
 function getItem(buildMenuContainer: BuildMenuContainer) {
-  const item = new BuildMenuItem(
-    new Basement(40, 40),
-    new Styles(Background.RED),
-  );
+  const item = new MinerMenuItem();
 
   buildMenuContainer.appendChild(item);
 
