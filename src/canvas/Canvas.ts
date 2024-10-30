@@ -29,15 +29,10 @@ export class Canvas {
   }
 
   render() {
+    this.#context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.#buildings.forEach((building) => {
-      this.#context.fillStyle = building.styles.background;
 
-      this.#context.fillRect(
-        building.position.x,
-        building.position.y,
-        building.basement.width,
-        building.basement.height,
-      );
+      building.render(this.#context)
     });
   }
 

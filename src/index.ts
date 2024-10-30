@@ -13,6 +13,7 @@ import { doWhile } from './iterables/while';
 import { onEvent } from './core/DnD/base/onEvent';
 import { throttle } from './core/utils/throttle';
 import { moveSource } from './core/DnD/moveble/moveSource';
+import { rendering } from './canvas/rendering';
 
 async function main() {
   const container = new Container();
@@ -27,7 +28,7 @@ async function main() {
 
   const item = getItem(buildMenuContainer);
 
-  buildMiner(item, canvas);
+  handleBuildMiner(item, canvas);
 
   const btn = document.createElement('button');
 
@@ -39,11 +40,13 @@ async function main() {
   btn.onclick = () => canvas.addGrid(40)
   
   document.body.appendChild(btn)
+
+  rendering(() => canvas.render())
 }
 
 main();
 
-async function buildMiner(item: MenuItem, canvas: Canvas) {
+async function handleBuildMiner(item: MenuItem, canvas: Canvas) {
   const { value } = await once(addSource(item.draggable)).next();
 
   const movable = new Movable(document.body);
@@ -65,9 +68,7 @@ async function buildMiner(item: MenuItem, canvas: Canvas) {
 
   item.element.style.removeProperty('transform');
 
-  canvas.render()
-
-  buildMiner(item, canvas);
+  handleBuildMiner(item, canvas);
 }
 
 function getItem(buildMenuContainer: BuildMenuContainer) {

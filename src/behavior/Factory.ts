@@ -1,7 +1,9 @@
 export class Factory {
-  itemsPerMinutes: number = 0;
+  itemsPerMinutes: number;
+
+  factoredItems = 0;
 
   constructor (itemsPerMinutes: number) {
-    this.itemsPerMinutes = itemsPerMinutes
+    this.itemsPerMinutes = itemsPerMinutes;
   }
 }
