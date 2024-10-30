@@ -14,6 +14,8 @@ import { onEvent } from './core/DnD/base/onEvent';
 import { throttle } from './core/utils/throttle';
 import { moveSource } from './core/DnD/moveble/moveSource';
 import { rendering } from './canvas/rendering';
+import { ConveyorMenuItem } from './buildings/Conveyor';
+import { repeat } from './iterables/repeat';
 
 async function main() {
   const container = new Container();
@@ -26,27 +28,37 @@ async function main() {
 
   const buildMenuContainer = new BuildMenuContainer();
 
-  const item = getItem(buildMenuContainer);
+  handleBuild(new MinerMenuItem(), buildMenuContainer, canvas);
 
-  handleBuildMiner(item, canvas);
+  handleBuild(new ConveyorMenuItem(), buildMenuContainer, canvas)
 
-  const btn = document.createElement('button');
-
-  btn.textContent = 'grid';
-  btn.style.position = 'fixed';
-  btn.style.top = '0px'
-  btn.style.left = '0px'
-
-  btn.onclick = () => canvas.addGrid(40)
-  
-  document.body.appendChild(btn)
+  addGridBtn(canvas);
 
   rendering(() => canvas.render())
 }
 
 main();
 
-async function handleBuildMiner(item: MenuItem, canvas: Canvas) {
+function handleBuild(menuItem: MenuItem, buildMenuContainer: BuildMenuContainer, canvas: Canvas) {
+  const minerMenuItem = getItem(menuItem, buildMenuContainer);
+
+  repeat(() => handleBuildMenuItem(minerMenuItem, canvas));
+}
+
+function addGridBtn(canvas: Canvas) {
+  const btn = document.createElement('button');
+
+  btn.textContent = 'grid';
+  btn.style.position = 'fixed';
+  btn.style.bottom = '0px';
+  btn.style.left = '0px';
+
+  btn.onclick = () => canvas.addGrid(40);
+
+  document.body.appendChild(btn);
+}
+
+async function handleBuildMenuItem(item: MenuItem, canvas: Canvas) {
   const { value } = await once(addSource(item.draggable)).next();
 
   const movable = new Movable(document.body);
@@ -62,21 +74,17 @@ async function handleBuildMiner(item: MenuItem, canvas: Canvas) {
 
   const { x, y } = item.element.getBoundingClientRect();
 
-  const miner = new Miner(x, y);
+  const miner = item.getBuilding(x, y);
 
   canvas.addBuilding(miner);
 
   item.element.style.removeProperty('transform');
-
-  handleBuildMiner(item, canvas);
 }
 
-function getItem(buildMenuContainer: BuildMenuContainer) {
-  const item = new MinerMenuItem();
-
-  buildMenuContainer.appendChild(item);
+function getItem(menuItem: MenuItem, buildMenuContainer: BuildMenuContainer) {
+  buildMenuContainer.appendChild(menuItem);
 
   document.body.appendChild(buildMenuContainer.render());
 
-  return item;
+  return menuItem;
 }
